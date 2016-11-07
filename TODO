@@ -1,0 +1,6 @@
+#1 OTA solution
+#2 Hide credentials
+#3 Automatic OTA download
+#4 More watchdog functions in the ATTiny85
+#5 Clean code from debugprints
+#6 Refactor code to several files
