@@ -2,18 +2,18 @@
 // TODO
 // MAKE IT POWER SAFE EVEN IF CONNECTION CAN NOT BE ESTABLISHED
 
-
 // SDK headers are in C, include them extern or else they will throw an error compiling/linking
 // all SDK .c files required can be added between the { }
 extern "C" {
 #include "user_interface.h"
 }
 
-#include <dummy.h>
+#include <Credentials.h>
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
-#include <NTPClient.h>
 #include <WiFiUdp.h>
+#include <NTPClient.h>
+
 
 #define _DEBUG_
 #define ALIVEPIN 2  //GPIO2 Pin
@@ -50,9 +50,9 @@ typedef struct {
   int battery;
 } rtcStore;
 
-// Update these with values suitable for your network.
-const char* ssid = "blackgate";
-const char* password = "kramdnilsalcin";
+
+char ssid[] = mySSID;
+char password[] = myPassword;
 const char* mqtt_server = "lindmark.synology.me";
 
 WiFiClient espClient;
@@ -135,11 +135,15 @@ void setup(){
         }
     }
 
+    printMacAddress();
+    readCredentials();
     
 
     if(!setup_wifi()){
       reset_and_goto_sleep();
     }
+
+    iotUpdater(true);
     
     setup_mqtt();
     
