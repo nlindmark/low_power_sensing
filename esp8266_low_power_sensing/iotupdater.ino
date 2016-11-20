@@ -1,3 +1,7 @@
+#include <EEPROM.h>
+#include <ESP8266HTTPClient.h>
+#include <ESP8266httpUpdate.h>
+
 #define SSIDBASE 200
 #define PASSWORDBASE 220
 #define MAGIC_BYTE 0x55
@@ -8,32 +12,33 @@
 #define update_server "lindmark.synology.me"
 #define update_uri "/esp/update/espupdater.php"
 
+// Update these with values suitable for your network.
+
+
 bool readCredentials() {
   
   EEPROM.begin(512);
-    
+      
   if (EEPROM.read(SSIDBASE - 1) != MAGIC_BYTE)  {
     Serial.println(EEPROM.read(SSIDBASE - 1), HEX);
 
-    for (int i = 0; ssid[i] != 0; EEPROM.write(SSIDBASE + i, ssid[i]),  i++);
-    for (int i = 0; password[i] != 0; EEPROM.write(PASSWORDBASE + i, password[i]),  i++);
+    for (int i = 0; i <= sizeof(ssid); i++) {EEPROM.write(SSIDBASE + i, ssid[i]);}
+    for (int i = 0; i <= sizeof(password); i++) {EEPROM.write(PASSWORDBASE + i, password[i]);}
     
     EEPROM.write(SSIDBASE - 1, MAGIC_BYTE);
 
-    Serial.println("ssid stored");  
   }
 
+ 
   int i = 0;
-  while(ssid[i] = EEPROM.read(SSIDBASE + i) && i < sizeof(ssid)){
+  while(ssid[i] = EEPROM.read(SSIDBASE + i)){
     i++;
   }
-   
+
   i = 0;
-  while(password[i] = EEPROM.read(PASSWORDBASE + i) && i < sizeof(password)){
+  while(password[i] = EEPROM.read(PASSWORDBASE + i)){
     i++;
   } 
-
-  Serial.println("ssid stored");
   
   EEPROM.end();
 }
